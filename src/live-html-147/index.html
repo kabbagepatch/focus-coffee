@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Focus Coffee</title>
+    <script type="module" src="/main.js" defer></script>
+  </head>
+
+  <body>
+    <main class="container">
+      <h1>Focus Coffee</h1>
+      <h2 id="sessionCount">Session 0/4</h2>
+      <div class="timer">
+        <div id="hours">00</div>:
+        <div id="minutes">00</div>:
+        <div id="seconds">00</div>
+      </div>
+      <h2 id="sessionType">Focus Time!</h2>
+      <div class="button-container">
+        <button id="start-stop">Start</button>
+        <button id="reset">Reset</button>
+      </div>
+    </main>
+  </body>
+<script>(async () => {const res = await fetch("/server-stream", {headers: {"Accept": "text/event-stream"}});for(const reader = res.body.getReader(); ;) {const { value, done } = await reader.read();const chunk = new TextDecoder().decode(value);if(chunk == "change") {console.log("Change?");window.location.reload();}}})();</script>
+</html>
