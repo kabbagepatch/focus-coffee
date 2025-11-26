@@ -42,11 +42,10 @@ export const setTheme = (theme) => {
 }
 
 const DEFAULT_SESSION_COUNT = 4;
-const DEFAULT_FOCUS_TIME = 10; // minutes
-const DEFAULT_BREAK_TIME = 1; // minutes
+const DEFAULT_FOCUS_TIME = 45; // minutes
+const DEFAULT_BREAK_TIME = 15; // minutes
 
-const updateDisplay = (h, m, s) => {
-  document.getElementById('hours').textContent = String(h).padStart(2, '0');
+const updateDisplay = (m = M, s = S) => {
   document.getElementById('minutes').textContent = String(m).padStart(2, '0');
   document.getElementById('seconds').textContent = String(s).padStart(2, '0');
 };
@@ -55,47 +54,49 @@ let sessionTimer;
 let sessionStatus = 'stopped';
 let sessionType = 'focus';
 let sessionCount = 0;
-let totalSessions = 4;
+let totalSessions = DEFAULT_SESSION_COUNT;
 
-let h = 0;
-let m = 0;
-let s = 0;
+let M = 0;
+let S = 0;
+
+const cup = document.getElementById('cup');
 
 const startTimer = () => {
   if (sessionTimer) {
     clearInterval(sessionTimer);
   }
   const startTime = Date.now();
-  console.log(`Timer started for ${h}h ${m}m ${s}s at ${new Date(startTime).toLocaleTimeString()}`);
-  const startH = h;
-  const startM = m;
-  const startS = s;
-  updateDisplay(h, m, s);
+  console.log(`Timer started for ${M}m ${S}s at ${new Date(startTime).toLocaleTimeString()}`);
+  const startM = M;
+  const startS = S;
+  const totalDrainTime = (startM * 60 + startS) * 1000; // in ms
+  updateDisplay();
+  cup.style.setProperty('--fill-level', '100%');
+  let percent = 100;
   sessionTimer = setInterval(() => {
-    const elapsed = Math.floor((Date.now() - startTime) / 1000);
-    const hoursElapsed = Math.floor(elapsed / 3600);
-    const minutesElapsed = Math.floor((elapsed % 3600) / 60);
-    const secondsElapsed = elapsed % 60;
-    h = startH - hoursElapsed;
-    m = startM - minutesElapsed;
-    s = startS - secondsElapsed;
-    if (s < 0) {
-      s += 60;
-      m -= 1;
+    const elapsed = Date.now() - startTime;
+    percent = Math.max(0, 1 - (elapsed / totalDrainTime).toFixed(4));
+    percent = cup.style.setProperty('--fill-level', percent * 100 + '%');
+
+    const secondsElapsedTotal = Math.floor(elapsed / 1000);
+    const minutesElapsed = Math.floor(secondsElapsedTotal / 60);
+    const secondsElapsed = secondsElapsedTotal % 60;
+    M = startM - minutesElapsed;
+    S = startS - secondsElapsed;
+    if (S < 0) {
+      S += 60;
+      M -= 1;
     }
-    if (m < 0) {
-      m += 60;
-      h -= 1;
-    }
-    if (h < 0) {
+    if (M < 0) {
       sessionStatus = 'completed';
       clearInterval(sessionTimer);
-      updateDisplay(0, 0, 0);
+      updateDisplay(0, 0);
+      cup.style.setProperty('--fill-level', '0%');
       return;
     }
 
-    updateDisplay(h, m, s);
-  }, 1000);
+    updateDisplay();
+  }, 500);
 };
 
 const resetTimer = () => {
@@ -104,7 +105,7 @@ const resetTimer = () => {
   if (sessionTimer) {
     clearInterval(sessionTimer);
   }
-  updateDisplay(0, 0, 0);
+  updateDisplay(0, 0);
 };
 
 const pauseTimer = () => {
@@ -119,31 +120,30 @@ const reset = () => {
   sessionCount = 0;
   sessionStatus = 'stopped';
   sessionType = 'focus';
-  document.getElementById('sessionCount').textContent = `Session ${sessionCount}/${totalSessions}`;
-  document.getElementById('sessionType').textContent = 'Focus Time!';
+  document.getElementById('session-count').textContent = `Session ${sessionCount}/${totalSessions}`;
+  document.getElementById('session-type').textContent = 'Focus Time!';
   document.getElementById('start-stop').textContent = 'Start';
+  cup.style.setProperty('--fill-level', '0%');
 }
 
 const startFocusSession = () => {
   console.log('Focus Session Started');
-  h = 0;
-  m = DEFAULT_FOCUS_TIME - 1;
-  s = 59;
+  M = DEFAULT_FOCUS_TIME - 1;
+  S = 59;
   startTimer();
   sessionType = 'focus';
   sessionStatus = 'running';
-  document.getElementById('sessionType').textContent = 'Focus Time!';
+  document.getElementById('session-type').textContent = 'Focus Time!';
 }
 
 const startBreakSession = () => {
   console.log('Break Session Started');
-  h = 0;
-  m = DEFAULT_BREAK_TIME - 1;
-  s = 59;
+  M = DEFAULT_BREAK_TIME - 1;
+  S = 59;
   startTimer();
   sessionType = 'break';
   sessionStatus = 'running';
-  document.getElementById('sessionType').textContent = 'Break Time!';
+  document.getElementById('session-type').textContent = 'Break Time! Go refill your cup.';
 };
 
 document.getElementById('start-stop').addEventListener('click', () => {
@@ -159,7 +159,7 @@ document.getElementById('start-stop').addEventListener('click', () => {
   } else if (sessionStatus === 'stopped') {
     // Start a new session
     sessionCount = 1;
-    document.getElementById('sessionCount').textContent = `Session ${sessionCount}/${totalSessions}`;
+    document.getElementById('session-count').textContent = `Session ${sessionCount}/${totalSessions}`;
     startFocusSession();
     sessionStatus = 'running';
     document.getElementById('start-stop').textContent = 'Pause';
@@ -175,7 +175,7 @@ document.getElementById('start-stop').addEventListener('click', () => {
         return;
       }
       startFocusSession();
-      document.getElementById('sessionCount').textContent = `Session ${sessionCount}/${totalSessions}`;
+      document.getElementById('session-count').textContent = `Session ${sessionCount}/${totalSessions}`;
     }
   }
 });

@@ -11,13 +11,16 @@
   <body>
     <main class="container">
       <h1>Focus Coffee</h1>
-      <h2 id="sessionCount">Session 0/4</h2>
-      <div class="timer">
-        <div id="hours">00</div>:
-        <div id="minutes">00</div>:
-        <div id="seconds">00</div>
+      <h2 id="session-count">Session 0/4</h2>
+      <div id="coffee-container">
+        <div id="cup">
+          <div class="timer" id="minutes">00</div>
+          <div>:</div>
+          <div class="timer" id="seconds">00</div>
+        </div>
+        <div id="handle"></div>
       </div>
-      <h2 id="sessionType">Focus Time!</h2>
+      <h2 id="session-type">Focus Time!</h2>
       <div class="button-container">
         <button id="start-stop">Start</button>
         <button id="reset">Reset</button>
