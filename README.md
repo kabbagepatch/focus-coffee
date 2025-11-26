@@ -1,7 +1,5 @@
-# Tauri + Vanilla
+# Focus Coffee
 
-This template should help get you started developing with Tauri in vanilla HTML, CSS and Javascript.
+A web/desktop Coffee Pomo timer made using Tauri
 
-## Recommended IDE Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+<img width="497" height="591" alt="image" src="https://github.com/user-attachments/assets/cf44e80d-35dd-43ce-a0bb-305fc1e33626" />
