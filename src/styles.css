@@ -29,7 +29,7 @@
 
 .container {
   margin: 0;
-  padding-top: 5vh;
+  padding-top: 3vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -42,6 +42,7 @@ h1 {
   font-size: 3rem;
   line-height: 1.2;
   margin: 0.1em;
+  margin-bottom: 15px;
 }
 
 #theme-button {

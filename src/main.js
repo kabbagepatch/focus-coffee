@@ -5,7 +5,7 @@ const themes = {
     'primary-color-shadow': 'hsl(336, 47%, 62%)',
     'secondary-color': 'hsl(336, 100%, 70%)',
     'tertiary-color': 'hsla(336, 100%, 87%, 1.00)',
-    'background-color': 'hsla(307, 47%, 18%, 0.60)',
+    'background-color': 'hsla(307, 47%, 18%, 1.00)',
     'background-color-light': 'hsl(307, 47%, 25%)',
     'text-color': 'white',
     'text-outline': 'hsl(276, 100%, 25%)'
@@ -15,7 +15,7 @@ const themes = {
     'primary-color-shadow': 'hsl(39, 59%, 58%)',
     'secondary-color': 'hsl(18, 71%, 27%)',
     'tertiary-color': 'hsl(31, 51%, 54%)',
-    'background-color': 'hsla(26, 42%, 19%, 0.60)',
+    'background-color': 'hsla(26, 42%, 19%, 1.00)',
     'background-color-light': 'hsl(26, 42%, 25%)',
     'text-color': 'hsl(0, 0%, 100%)',
     'text-outline': 'hsl(26, 42%, 19%)',
@@ -25,7 +25,7 @@ const themes = {
     'primary-color-shadow': 'hsl(60, 63%, 69%)',
     'secondary-color': 'hsl(77, 14%, 45%)',
     'tertiary-color': 'hsla(101, 41%, 74%, 1.00)',
-    'background-color': 'hsla(227, 8%, 22%, 0.60)',
+    'background-color': 'hsla(227, 8%, 22%, 1.00)',
     'background-color-light': 'hsl(227, 8%, 38%)',
     'text-color': 'hsl(0, 0%, 100%)',
     'text-outline': 'hsl(26, 62%, 18%)'
@@ -35,7 +35,7 @@ const themes = {
     'primary-color-shadow': 'hsl(48, 100%, 65%)',
     'secondary-color': 'hsl(204, 100%, 50%)',
     'tertiary-color': 'hsl(48, 100%, 85%)',
-    'background-color': 'hsla(210, 100%, 16%, 0.60)',
+    'background-color': 'hsla(210, 100%, 16%, 1.00)',
     'background-color-light': 'hsl(210, 100%, 22%)',
     'text-color': 'hsla(0, 0%, 100%, 1.00)',
     'text-outline': 'hsla(210, 100%, 21%, 1.00)'
@@ -196,6 +196,8 @@ const startBreakSession = () => {
 };
 
 const skip = () => {
+  sessionStatus = 'running';
+  startButton.textContent = 'Pause';
   if (sessionCount === 0) {
     sessionCount += 1;
     sessionCountDisplay.textContent = `Session ${sessionCount}/${totalSessions}`;
@@ -236,7 +238,7 @@ startButton.addEventListener('click', () => {
     // Resume the session
     sessionStatus = 'running';
     startButton.textContent = 'Pause';
-    startTimer();
+    startTimer(sessionType === 'break');
   } else if (sessionStatus === 'stopped') {
     // Start a new session
     sessionCount = 1;
