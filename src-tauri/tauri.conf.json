@@ -11,11 +11,10 @@
     "windows": [
       {
         "title": "focus-coffee",
-        "width": 500,
-        "height": 600,
+        "width": 350,
+        "height": 500,
         "alwaysOnTop": true,
-        "transparent": true,
-        "resizable": false
+        "transparent": true
       }
     ],
     "security": {

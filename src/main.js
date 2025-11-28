@@ -5,8 +5,8 @@ const themes = {
     'primary-color-shadow': 'hsl(336, 47%, 62%)',
     'secondary-color': 'hsl(336, 100%, 70%)',
     'tertiary-color': 'hsla(336, 100%, 87%, 1.00)',
-    'background-color': 'hsla(307, 47%, 18%, 0.50)',
-    'background-color-dark': 'hsl(307, 47%, 15%)',
+    'background-color': 'hsla(307, 47%, 18%, 0.60)',
+    'background-color-light': 'hsl(307, 47%, 25%)',
     'text-color': 'white',
     'text-outline': 'hsl(276, 100%, 25%)'
   },
@@ -14,9 +14,9 @@ const themes = {
     'primary-color': 'hsl(39, 59%, 78%)',
     'primary-color-shadow': 'hsl(39, 59%, 58%)',
     'secondary-color': 'hsl(18, 71%, 27%)',
-    'tertiary-color': 'hsl(31, 51%, 34%)',
-    'background-color': 'hsl(26, 42%, 19%)',
-    'background-color-dark': 'hsl(26, 42%, 15%)',
+    'tertiary-color': 'hsl(31, 51%, 54%)',
+    'background-color': 'hsla(26, 42%, 19%, 0.60)',
+    'background-color-light': 'hsl(26, 42%, 25%)',
     'text-color': 'hsl(0, 0%, 100%)',
     'text-outline': 'hsl(26, 42%, 19%)',
   },
@@ -25,8 +25,8 @@ const themes = {
     'primary-color-shadow': 'hsl(60, 63%, 69%)',
     'secondary-color': 'hsl(77, 14%, 45%)',
     'tertiary-color': 'hsla(101, 41%, 74%, 1.00)',
-    'background-color': 'hsla(227, 8%, 22%, 50%)',
-    'background-color-dark': 'hsl(227, 8%, 18%)',
+    'background-color': 'hsla(227, 8%, 22%, 0.60)',
+    'background-color-light': 'hsl(227, 8%, 38%)',
     'text-color': 'hsl(0, 0%, 100%)',
     'text-outline': 'hsl(26, 62%, 18%)'
   },
@@ -35,8 +35,8 @@ const themes = {
     'primary-color-shadow': 'hsl(48, 100%, 65%)',
     'secondary-color': 'hsl(204, 100%, 50%)',
     'tertiary-color': 'hsl(48, 100%, 85%)',
-    'background-color': 'hsl(210, 100%, 16%)',
-    'background-color-dark': 'hsl(210, 100%, 12%)',
+    'background-color': 'hsla(210, 100%, 16%, 0.60)',
+    'background-color-light': 'hsl(210, 100%, 22%)',
     'text-color': 'hsla(0, 0%, 100%, 1.00)',
     'text-outline': 'hsla(210, 100%, 21%, 1.00)'
   }
@@ -83,13 +83,15 @@ document.getElementById('theme-button').addEventListener('click', () => {
 });
 
 const DEFAULT_SESSION_COUNT = 4;
-const DEFAULT_FOCUS_TIME = 45; // minutes
-const DEFAULT_BREAK_TIME = 1; // minutes
+const DEFAULT_FOCUS_TIME = 50; // minutes
+const DEFAULT_BREAK_TIME = 10; // minutes
 
 let sessionTimer;
 let sessionStatus = 'stopped';
 let sessionType = 'focus';
 let sessionCount = 0;
+let focusTime = DEFAULT_FOCUS_TIME;
+let breakTime = DEFAULT_BREAK_TIME;
 let totalSessions = DEFAULT_SESSION_COUNT;
 
 let M = 0;
@@ -137,12 +139,19 @@ const startTimer = (reverse=false) => {
       M -= 1;
     }
     if (M < 0) {
+      const audio = new Audio('./assets/chime.mp3');
+      audio.play();
       sessionStatus = 'completed';
       clearInterval(sessionTimer);
       updateDisplay(0, 0);
       cup.style.setProperty('--fill-level', reverse ? '100%' : '0%');
-      startButton.textContent = 'Next Session';
+      startButton.textContent = (sessionType === 'focus' ? 'Start Break' : 'Next Session');
       sessionDisplay.textContent = (sessionType === 'focus' ? 'Focus' : 'Break') + ' Session Completed!';
+      if (sessionCount >= totalSessions && sessionType === 'break') {
+        sessionDisplay.textContent = 'All Sessions Completed!';
+        startButton.textContent = 'Start Over';
+        return;
+      }
       return;
     }
 
@@ -168,7 +177,7 @@ const pauseTimer = () => {
 
 const startFocusSession = () => {
   console.log('Focus Session Started');
-  M = DEFAULT_FOCUS_TIME - 1;
+  M = focusTime - 1;
   S = 59;
   startTimer();
   sessionType = 'focus';
@@ -178,15 +187,19 @@ const startFocusSession = () => {
 
 const startBreakSession = () => {
   console.log('Break Session Started');
-  M = DEFAULT_BREAK_TIME - 1;
+  M = breakTime - 1;
   S = 59;
   startTimer(true);
   sessionType = 'break';
   sessionStatus = 'running';
-  sessionDisplay.textContent = 'Break Time! Go refill your cup.';
+  sessionDisplay.textContent = 'Break Time! Refill your cup';
 };
 
 const skip = () => {
+  if (sessionCount === 0) {
+    sessionCount += 1;
+    sessionCountDisplay.textContent = `Session ${sessionCount}/${totalSessions}`;
+  }
   if (sessionTimer) {
     clearInterval(sessionTimer);
   }
@@ -194,13 +207,12 @@ const skip = () => {
     startBreakSession();
   } else {
     sessionCount += 1;
+    sessionCountDisplay.textContent = `Session ${sessionCount}/${totalSessions}`;
     if (sessionCount >= totalSessions) {
-      alert('All focus sessions completed! Take a longer break.');
       reset();
       return;
     }
     startFocusSession();
-    sessionCountDisplay.textContent = `Session ${sessionCount}/${totalSessions}`;
   }
 };
 
@@ -239,7 +251,6 @@ startButton.addEventListener('click', () => {
     } else {
       sessionCount += 1;
       if (sessionCount >= totalSessions) {
-        alert('All focus sessions completed! Take a longer break.');
         reset();
         return;
       }
@@ -255,4 +266,33 @@ document.getElementById('skip').addEventListener('click', () => {
 
 document.getElementById('reset').addEventListener('click', () => {
   reset();
+});
+
+const setPomo = (f, b) => {
+  focusTime = f;
+  breakTime = b;
+};
+
+const option25 = document.getElementById('25-5');
+option25.addEventListener('click', () => {
+  setPomo(25, 5);
+  option25.className = "session-option session-option-selected";
+  option50.className = "session-option";
+  option75.className = "session-option";
+});
+
+const option50 = document.getElementById('50-10');
+option50.addEventListener('click', () => {
+  setPomo(50, 10);
+  option25.className = "session-option";
+  option50.className = "session-option session-option-selected";
+  option75.className = "session-option";
+});
+
+const option75 = document.getElementById('75-15');
+option75.addEventListener('click', () => {
+  setPomo(75, 15);
+  option25.className = "session-option";
+  option50.className = "session-option";
+  option75.className = "session-option session-option-selected";
 });
