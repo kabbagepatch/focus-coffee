@@ -4,7 +4,7 @@ const themes = {
     'primary-color': 'hsl(336, 89%, 93%)',
     'primary-color-shadow': 'hsl(336, 47%, 62%)',
     'secondary-color': 'hsl(336, 100%, 70%)',
-    'tertiary-color': 'hsla(336, 100%, 87%, 1.00)',
+    'tertiary-color': 'hsl(336, 100%, 87%)',
     'background-color': 'hsla(307, 47%, 18%, 0.6)',
     'background-color-light': 'hsl(307, 47%, 25%)',
     'text-color': 'white',
@@ -24,7 +24,7 @@ const themes = {
     'primary-color': 'hsl(60, 63%, 89%)',
     'primary-color-shadow': 'hsl(60, 63%, 69%)',
     'secondary-color': 'hsl(77, 14%, 45%)',
-    'tertiary-color': 'hsla(101, 41%, 74%, 1.00)',
+    'tertiary-color': 'hsl(101, 41%, 74%)',
     'background-color': 'hsla(227, 8%, 22%, 0.6)',
     'background-color-light': 'hsl(227, 8%, 38%)',
     'text-color': 'hsl(0, 0%, 100%)',
@@ -37,8 +37,8 @@ const themes = {
     'tertiary-color': 'hsl(48, 100%, 85%)',
     'background-color': 'hsla(210, 100%, 16%, 0.6)',
     'background-color-light': 'hsl(210, 100%, 22%)',
-    'text-color': 'hsla(0, 0%, 100%, 1.00)',
-    'text-outline': 'hsla(210, 100%, 21%, 1.00)'
+    'text-color': 'hsl(0, 0%, 100%)',
+    'text-outline': 'hsl(210, 100%, 21%)'
   }
 };
 
@@ -210,8 +210,9 @@ const skip = () => {
   } else {
     sessionCount += 1;
     sessionCountDisplay.textContent = `Session ${sessionCount}/${totalSessions}`;
-    if (sessionCount >= totalSessions) {
+    if (sessionCount > totalSessions) {
       reset();
+      sessionDisplay.textContent = 'All Sessions Completed!';
       return;
     }
     startFocusSession();
@@ -254,7 +255,7 @@ startButton.addEventListener('click', () => {
       startBreakSession();
     } else {
       sessionCount += 1;
-      if (sessionCount >= totalSessions) {
+      if (sessionCount > totalSessions) {
         reset();
         return;
       }
