@@ -45,19 +45,30 @@ h1 {
   margin-bottom: 15px;
 }
 
-#theme-button {
+#other-buttons {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  bottom: 5px;
+  left: 5px;
+}
+
+.other-buttons {
   background: none;
   border: none;
   cursor: pointer;
   width: 40px;
   height: 40px;
-  padding: 5px;
+  padding: 4px;
+  border-radius: 5px;
+  box-shadow: 0 0.05em 0.1em var(--primary-color-shadow);
+  transition: box-shadow 0.3s;
 }
 
-#theme-icon {
+.other-buttons:active {
+  box-shadow: none;
+  transform: translateY(0.1em);
+}
+
+#theme-icon, #download-icon {
   width: 100%;
   height: 100%;
 }
@@ -147,7 +158,7 @@ button {
   border-radius: 0.3em;
   padding: 0.5em 1em;
   font-size: 1.2rem;
-  box-shadow: 0 0.1em 0.2em var(--primary-color-shadow);
+  box-shadow: 0.1em 0.1em 0.2em var(--primary-color-shadow);
   transition: background-color 0.3s, box-shadow 0.3s;
   display: block;
   width: 90px;
@@ -216,11 +227,9 @@ button {
     font-size: 2rem;
   }
 
-  #theme-button {
+  .other-buttons {
     width: 35px;
     height: 35px;
-    top: 0px;
-    right: 0px;
   }
 
   h2 {

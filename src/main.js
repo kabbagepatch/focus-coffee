@@ -5,7 +5,7 @@ const themes = {
     'primary-color-shadow': 'hsl(336, 47%, 62%)',
     'secondary-color': 'hsl(336, 100%, 70%)',
     'tertiary-color': 'hsl(336, 100%, 87%)',
-    'background-color': 'hsla(307, 47%, 18%, 0.6)',
+    'background-color': 'hsla(307, 47%, 18%, 60%)',
     'background-color-light': 'hsl(307, 47%, 25%)',
     'text-color': 'white',
     'text-outline': 'hsl(276, 100%, 25%)'
@@ -15,7 +15,7 @@ const themes = {
     'primary-color-shadow': 'hsl(39, 59%, 58%)',
     'secondary-color': 'hsl(18, 71%, 27%)',
     'tertiary-color': 'hsl(31, 51%, 54%)',
-    'background-color': 'hsla(26, 42%, 19%, 0.6)',
+    'background-color': 'hsla(26, 42%, 14%, 60%)',
     'background-color-light': 'hsl(26, 42%, 25%)',
     'text-color': 'hsl(0, 0%, 100%)',
     'text-outline': 'hsl(26, 42%, 19%)',
@@ -25,7 +25,7 @@ const themes = {
     'primary-color-shadow': 'hsl(60, 63%, 69%)',
     'secondary-color': 'hsl(77, 14%, 45%)',
     'tertiary-color': 'hsl(101, 41%, 74%)',
-    'background-color': 'hsla(227, 8%, 22%, 0.6)',
+    'background-color': 'hsla(227, 8%, 22%, 60%)',
     'background-color-light': 'hsl(227, 8%, 38%)',
     'text-color': 'hsl(0, 0%, 100%)',
     'text-outline': 'hsl(26, 62%, 18%)'
@@ -35,7 +35,7 @@ const themes = {
     'primary-color-shadow': 'hsl(48, 100%, 65%)',
     'secondary-color': 'hsl(204, 100%, 50%)',
     'tertiary-color': 'hsl(48, 100%, 85%)',
-    'background-color': 'hsla(210, 100%, 16%, 0.6)',
+    'background-color': 'hsla(210, 100%, 16%, 60%)',
     'background-color-light': 'hsl(210, 100%, 22%)',
     'text-color': 'hsl(0, 0%, 100%)',
     'text-outline': 'hsl(210, 100%, 21%)'
@@ -52,6 +52,8 @@ const setTheme = (theme) => {
   Object.entries(vars).forEach(([key, value]) => {
     root.style.setProperty(`--${key}`, value);
   });
+
+  document.getElementById("theme-icon").src = `assets/${theme.toLowerCase()}-brush.png`;
 
   switch (theme) {
     case 'Elixir':
@@ -81,6 +83,10 @@ document.getElementById('theme-button').addEventListener('click', () => {
     setTheme('Elixir');
   }
 });
+
+if (!window.__TAURI__) {
+  document.getElementById('download-button').hidden = false;
+}
 
 const DEFAULT_SESSION_COUNT = 4;
 const DEFAULT_FOCUS_TIME = 50; // minutes

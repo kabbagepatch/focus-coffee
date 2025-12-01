@@ -11,9 +11,6 @@
   <body>
     <main class="container">
       <h1 id="title">Focus Coffee</h1>
-      <button id="theme-button">
-        <img id="theme-icon" src="assets/coffee.png" alt="Toggle Theme" />
-      </button>
       <h2 id="session-count">Session 0/4</h2>
       <div id="coffee-container">
         <div id="cup">
@@ -33,6 +30,14 @@
         <button id="25-5" class="session-option">25/5</button>
         <button id="50-10" class="session-option session-option-selected">50/10</button>
         <button id="75-15" class="session-option">75/15</button>
+      </div>
+      <div id="other-buttons">
+        <button class="other-buttons" id="theme-button">
+          <img id="theme-icon" src="assets/elixir-brush.png" title="Toggle Theme" />
+        </button>
+        <button class="other-buttons" id="download-button" hidden>
+          <a href="https://github.com/kabbagepatch/focus-coffee/releases" target="_blank"><img id="download-icon" src="assets/download.png" title="Download Desktop Version" /></a>
+        </button>
       </div>
     </main>
   </body>
