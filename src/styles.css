@@ -28,16 +28,43 @@
 }
 
 .container {
+  display: flex;
+  justify-content: center;
+  gap: 150px;
+}
+
+.coffee-container {
   margin: 0;
-  padding-top: 3vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
+  width: 350px;
+}
+
+.tasks-container {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+}
+
+@media (max-width: 700px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .tasks-container {
+    margin-top: 3vh;
+  }
 }
 
 h1 {
+  text-align: center;
+  padding: 3vh 0;
   color: var(--primary-color);
   font-size: 3rem;
   line-height: 1.2;
@@ -46,7 +73,7 @@ h1 {
 }
 
 #other-buttons {
-  position: absolute;
+  position: fixed;
   bottom: 5px;
   left: 5px;
 }
@@ -150,7 +177,7 @@ button {
   gap: 1em;
 }
 
-#button-container button {
+.primary-button {
   background-color: var(--tertiary-color);
   color: var(--text-color);
   text-shadow: 1px 1px 2px var(--text-outline);
@@ -164,12 +191,12 @@ button {
   width: 90px;
 }
 
-#button-container button:hover {
+.primary-button:hover {
   background-color: var(--primary-color-shadow);
   box-shadow: 0 0.2em 0.3em var(--tertiary-color);
 }
 
-#button-container button:active {
+.primary-button:active {
   box-shadow: none;
   transform: translateY(0.1em);
 }
@@ -192,6 +219,51 @@ button {
 }
 
 .session-option-selected {
+  background-color: var(--background-color-light);
+}
+
+#task-title {
+  background-color: none;
+  margin-bottom: 20px;
+}
+
+#task-input {
+  border-radius: 10px;
+  padding: 5px 10px;
+  font-size: 16px;
+}
+
+#add-task {
+  width: auto;
+  display: inline;
+  padding: 5px 10px;
+  font-size: 16px;
+}
+
+#task-list {
+  margin: 0;
+  margin-top: 10px;
+  padding: 0;
+}
+
+#task-list li {
+  cursor: pointer;
+  list-style: none;
+  padding: 12px 8px;
+  transition: background-color 0.3s;
+  border-radius: 5px;
+}
+
+#task-list li:hover {
+  background-color: var(--secondary-color);
+}
+
+#task-list li:active {
+  transform: translateY(0.1em);
+}
+
+.task-complete {
+  text-decoration: line-through;
   background-color: var(--background-color-light);
 }
 

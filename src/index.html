@@ -3,33 +3,48 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" type="image/x-icon" href="./assets/coffee.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Focus Coffee</title>
     <script type="module" src="/main.js" defer></script>
   </head>
 
   <body>
+    <h1 id="title">Focus Coffee</h1>
     <main class="container">
-      <h1 id="title">Focus Coffee</h1>
-      <h2 id="session-count">Session 0/4</h2>
-      <div id="coffee-container">
-        <div id="cup">
-          <div class="timer" id="minutes">00</div>
-          <div>:</div>
-          <div class="timer" id="seconds">00</div>
+      <div class="coffee-container">
+        <h2 id="session-count">Session 0/4</h2>
+        <div id="coffee-container">
+          <div id="cup">
+            <div class="timer" id="minutes">00</div>
+            <div>:</div>
+            <div class="timer" id="seconds">00</div>
+          </div>
+          <div id="handle"></div>
         </div>
-        <div id="handle"></div>
+        <h2 id="session-type">Focus Time!</h2>
+        <div id="button-container">
+          <button class="primary-button" id="start-stop">Start</button>
+          <button class="primary-button" id="skip">Skip</button>
+          <button class="primary-button" id="reset">Reset</button>
+        </div>
+        <div id="session-options">
+          <button id="25-5" class="session-option">25/5</button>
+          <button id="50-10" class="session-option session-option-selected">50/10</button>
+          <button id="75-15" class="session-option">75/15</button>
+        </div>
       </div>
-      <h2 id="session-type">Focus Time!</h2>
-      <div id="button-container">
-        <button id="start-stop">Start</button>
-        <button id="skip">Skip</button>
-        <button id="reset">Reset</button>
-      </div>
-      <div id="session-options">
-        <button id="25-5" class="session-option">25/5</button>
-        <button id="50-10" class="session-option session-option-selected">50/10</button>
-        <button id="75-15" class="session-option">75/15</button>
+      <div class="tasks-container">
+        <h2 id="task-title">Tasks</h2>
+        <form id="task-form">
+          <input type="text" id="task-input" placeholder="Enter a task" required>
+          <button type="submit" class="primary-button" id="add-task">Add</button>
+        </form>
+
+        <div id="task-list-container">
+          <ul id="task-list">
+          </ul>
+        </div>
       </div>
       <div id="other-buttons">
         <button class="other-buttons" id="theme-button">
