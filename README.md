@@ -4,7 +4,7 @@ A simple web/desktop Coffee Pomo timer made using Tauri, with different themes a
 
 ## Refilling Pomo Timer
 <img width="356" height="631" alt="image" src="https://github.com/user-attachments/assets/e36770ca-378f-4f97-b8c6-8bde1f9c8914" />
-<img width="356" height="631" alt="image" src="https://github.com/user-attachments/assets/e1d61a41-b796-41e9-82c7-884d45e5b0ab" />
+<img width="356" height="631" alt="image" src="https://github.com/user-attachments/assets/77c96d8e-3002-4ce2-899e-f571d290cb3a" />
 
 ## With Task List
 
