@@ -1,9 +1,12 @@
 # Focus Coffee
 
-A simple web/desktop Coffee Pomo timer made using Tauri, with different themes and session options
+A simple web/desktop Coffee Pomo timer made using Tauri, with different themes and session options, and an optional task list.
 
-<img width="352" height="552" alt="image" src="https://github.com/user-attachments/assets/b524bacf-7133-4fff-8a87-0a06d10ce6f2" />
-<img width="352" height="552" alt="image" src="https://github.com/user-attachments/assets/224a2459-0dd4-4490-99e0-2bb9a3fa6a35" />
+## Refilling Pomo Timer
+<img width="356" height="631" alt="image" src="https://github.com/user-attachments/assets/e36770ca-378f-4f97-b8c6-8bde1f9c8914" />
+<img width="356" height="631" alt="image" src="https://github.com/user-attachments/assets/e1d61a41-b796-41e9-82c7-884d45e5b0ab" />
 
-<img width="352" height="552" alt="image" src="https://github.com/user-attachments/assets/ea4265e1-611c-403a-b4d6-e677fd0dd768" />
-<img width="352" height="552" alt="image" src="https://github.com/user-attachments/assets/e8ed9a6d-e976-4ecc-9e0e-30fcdda1b509" />
+## With Task List
+
+<img width="356" height="1032" alt="image" src="https://github.com/user-attachments/assets/d26d5cd9-b49f-43dc-bd9c-d36c2a61d247" />
+<img width="356" height="1032" alt="image" src="https://github.com/user-attachments/assets/a0f72aac-110f-4bac-b2d5-433cd9c61494" />
