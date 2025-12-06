@@ -5,7 +5,7 @@ const themes = {
     'primary-color-shadow': 'hsl(336, 47%, 62%)',
     'secondary-color': 'hsl(336, 100%, 70%)',
     'tertiary-color': 'hsl(336, 100%, 87%)',
-    'background-color': 'hsla(307, 47%, 18%, 1.00)',
+    'background-color': 'hsla(307, 47%, 18%, 0.60)',
     'background-color-light': 'hsl(307, 47%, 25%)',
     'text-color': 'white',
     'text-outline': 'hsl(276, 100%, 25%)'
@@ -15,7 +15,7 @@ const themes = {
     'primary-color-shadow': 'hsl(39, 59%, 58%)',
     'secondary-color': 'hsl(18, 71%, 27%)',
     'tertiary-color': 'hsl(31, 51%, 54%)',
-    'background-color': 'hsla(26, 42%, 14%, 1.00)',
+    'background-color': 'hsla(26, 42%, 14%, 0.60)',
     'background-color-light': 'hsl(26, 42%, 25%)',
     'text-color': 'hsl(0, 0%, 100%)',
     'text-outline': 'hsl(26, 42%, 19%)',
@@ -25,7 +25,7 @@ const themes = {
     'primary-color-shadow': 'hsl(60, 63%, 69%)',
     'secondary-color': 'hsl(77, 14%, 45%)',
     'tertiary-color': 'hsl(101, 41%, 74%)',
-    'background-color': 'hsla(227, 8%, 22%, 1.00)',
+    'background-color': 'hsla(227, 8%, 22%, 0.60)',
     'background-color-light': 'hsl(227, 8%, 38%)',
     'text-color': 'hsl(0, 0%, 100%)',
     'text-outline': 'hsl(26, 62%, 18%)'
@@ -35,7 +35,7 @@ const themes = {
     'primary-color-shadow': 'hsl(48, 100%, 65%)',
     'secondary-color': 'hsl(204, 100%, 50%)',
     'tertiary-color': 'hsl(48, 100%, 85%)',
-    'background-color': 'hsla(210, 100%, 16%, 1.00)',
+    'background-color': 'hsla(210, 100%, 16%, 0.60)',
     'background-color-light': 'hsl(210, 100%, 22%)',
     'text-color': 'hsl(0, 0%, 100%)',
     'text-outline': 'hsl(210, 100%, 21%)'
@@ -322,6 +322,18 @@ option75.addEventListener('click', () => {
   option75.className = "session-option session-option-selected";
 });
 
+
+const taskContainer = document.getElementById('tasks-container');
+let tasksDisplayed = localStorage.getItem('displayTasks') || 'false';
+if (tasksDisplayed === 'true') {
+  taskContainer.style.display = 'flex';
+}
+document.getElementById('tasks-button').addEventListener('click', () => {
+  taskContainer.style.display = tasksDisplayed === 'true' ? 'none' : 'flex';
+  tasksDisplayed = tasksDisplayed === 'true' ? 'false' : 'true';
+  localStorage.setItem('displayTasks', tasksDisplayed);
+});
+
 const tasks = [];
 let completedTasks = 0;
 const taskTitle = document.getElementById('task-title');
@@ -347,12 +359,5 @@ document.getElementById('task-form').addEventListener('submit', (e) => {
   tasks.push(taskInput.value);
   taskInput.value = '';
   taskTitle.textContent = `Tasks ${completedTasks}/${tasks.length}`;
-});
-
-window.addEventListener('beforeunload', e => {
-  if (tasks.length > completedTasks) { 
-    e.preventDefault();
-    return 'You have incomplete tasks that will be erased. Are you sure you want to leave?';
-  }
 });
 

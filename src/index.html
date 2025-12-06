@@ -34,7 +34,7 @@
           <button id="75-15" class="session-option">75/15</button>
         </div>
       </div>
-      <div class="tasks-container">
+      <div class="tasks-container" id="tasks-container">
         <h2 id="task-title">Tasks</h2>
         <form id="task-form">
           <input type="text" id="task-input" placeholder="Enter a task" required>
@@ -46,12 +46,17 @@
           </ul>
         </div>
       </div>
-      <div id="other-buttons">
+      <div id="other-buttons-container">
         <button class="other-buttons" id="theme-button">
-          <img id="theme-icon" src="assets/elixir-brush.png" title="Toggle Theme" />
+          <img class="icons" id="theme-icon" src="assets/elixir-brush.png" title="Toggle Theme" />
+        </button>
+        <button class="other-buttons" id="tasks-button">
+          <img class="icons" src="assets/tasks.png" title="Toggle Theme" />
         </button>
         <button class="other-buttons" id="download-button" hidden>
-          <a href="https://github.com/kabbagepatch/focus-coffee/releases" target="_blank"><img id="download-icon" src="assets/download.png" title="Download Desktop Version" /></a>
+          <a href="https://github.com/kabbagepatch/focus-coffee/releases" target="_blank">
+            <img class="icons" src="assets/download.png" title="Download Desktop Version" />
+          </a>
         </button>
       </div>
     </main>

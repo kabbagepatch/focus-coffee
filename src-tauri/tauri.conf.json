@@ -11,8 +11,8 @@
     "windows": [
       {
         "title": "focus-coffee",
-        "width": 350,
-        "height": 570,
+        "width": 370,
+        "height": 600,
         "alwaysOnTop": true,
         "transparent": true
       }
