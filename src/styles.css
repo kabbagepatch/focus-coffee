@@ -160,6 +160,7 @@ h2 {
   font-size: 4.5rem;
   line-height: 1;
   background-color: var(--background-color-light);
+  text-shadow: 1px 1px 2px var(--text-outline);
   padding: 0.17em 0.1em 0.2em 0.1em;
   border-radius: 0.2em;
 }
@@ -219,6 +220,7 @@ button {
 }
 
 .session-option-selected {
+  color: var(--primary-color);
   background-color: var(--background-color-light);
 }
 

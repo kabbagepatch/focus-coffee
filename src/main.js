@@ -39,7 +39,27 @@ const themes = {
     'background-color-light': 'hsl(210, 100%, 22%)',
     'text-color': 'hsl(0, 0%, 100%)',
     'text-outline': 'hsl(210, 100%, 21%)'
-  }
+  },
+  'Water': {
+    'primary-color': 'hsl(215, 87%, 12%)',
+    'primary-color-shadow': 'hsl(169, 44%, 83%)',
+    'secondary-color': 'hsl(169, 58%, 91%)',
+    'tertiary-color': 'hsl(169, 58%, 91%)',
+    'background-color': 'hsla(203, 55%, 54%, 0.60)',
+    'background-color-light': 'hsl(203, 72%, 62%)',
+    'text-color': 'hsl(215, 87%, 12%)',
+    'text-outline': 'hsl(185, 64%, 89%)'
+  },
+  'Cola': {
+    'primary-color': 'hsl(0, 0%, 100%)',
+    'primary-color-shadow': 'hsl(0, 0%, 14%)',
+    'secondary-color': 'hsl(358, 100%, 48%)',
+    'tertiary-color': 'hsl(0, 0%, 0%)',
+    'background-color': 'hsla(0, 0%, 0%, 0.60)',
+    'background-color-light': 'hsl(358, 100%, 48%)',
+    'text-color': 'hsl(0, 0%, 100%)',
+    'text-outline': 'hsl(0, 0%, 0%)'
+  },
 };
 
 const setTheme = (theme) => {
@@ -54,21 +74,7 @@ const setTheme = (theme) => {
   });
 
   document.getElementById("theme-icon").src = `assets/${theme.toLowerCase()}-brush.png`;
-
-  switch (theme) {
-    case 'Elixir':
-      document.getElementById('title').textContent = 'Focus Elixir';
-      break;
-    case 'Coffee':
-      document.getElementById('title').textContent = 'Focus Coffee';
-      break;
-    case 'Matcha':
-      document.getElementById('title').textContent = 'Focus Matcha';
-      break;
-    case 'Lemonade':
-      document.getElementById('title').textContent = 'Focus Lemonade';
-      break;
-  }
+  document.getElementById('title').textContent = `Focus ${theme}`;
 }
 
 setTheme(curTheme);
@@ -79,6 +85,10 @@ document.getElementById('theme-button').addEventListener('click', () => {
     setTheme('Matcha');
   } else if (curTheme === 'Matcha') {
     setTheme('Lemonade');
+  } else if (curTheme === 'Lemonade') {
+    setTheme('Water');
+  } else if (curTheme === 'Water') {
+    setTheme('Cola');
   } else {
     setTheme('Elixir');
   }
