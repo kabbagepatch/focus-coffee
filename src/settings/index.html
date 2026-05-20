@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="icon" type="image/x-icon" href="../assets/coffee.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Focus Coffee</title>
+    <script type="module" src="./main.js" defer></script>
+  </head>
+
+  <body>
+    <div id="top-buttons-container">
+      <button class="top-button">
+        <a href="../index.html"><img class="icons" id="settings-icon" src="../assets/back.png" title="Back" /></a>
+      </button>
+    </div>
+    <h1>Settings</h1>
+    <main class="settings-container">
+      <button class="settings-buttons" id="theme-button">
+        <img class="icons" id="theme-icon" src="../assets/coffee-brush.png" title="Toggle Theme" />
+        <span>Switch Drink: <span id="drink-name">Coffee</span></span>
+      </button>
+      <button class="settings-buttons" id="tasks-button">
+        <img class="icons" src="../assets/tasks.png" title="Toggle Theme" />
+        <span>Task List: <span id="task-list-display-value">Off</span></span>
+      </button>
+      <a class="settings-buttons-link" href="https://github.com/kabbagepatch/focus-coffee/releases" target="_blank" hidden>
+        <button class="settings-buttons" id="download-button">
+          <img class="icons" src="../assets/download.png" title="Download Desktop Version" />
+          <span>Desktop Version</span>
+        </button>
+      </a>
+      <h2 class="stats">Focus Sessions: <span id="total-session-count">0</span></h2>
+      <h2 class="stats">Tasks Done: <span id="total-task-count">0</span></h2>
+    </main>
+  </body>
+</html>

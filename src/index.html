@@ -10,10 +10,15 @@
   </head>
 
   <body>
+    <div id="top-buttons-container">
+      <button class="top-button">
+        <a href="./settings/index.html"><img class="icons" id="settings-icon" src="assets/settings.png" title="Toggle Theme" /></a>
+      </button>
+    </div>
     <h1 id="title">Focus Coffee</h1>
     <main class="container">
       <div class="coffee-container">
-        <h2 id="session-count">Session 0/4</h2>
+        <h2 class="subtitle" id="session-count">Session 0/4</h2>
         <div id="coffee-container">
           <div id="cup">
             <div class="timer" id="minutes">00</div>
@@ -22,7 +27,7 @@
           </div>
           <div id="handle"></div>
         </div>
-        <h2 id="session-type">Focus Time!</h2>
+        <h2 class="subtitle" id="session-type">Focus Time!</h2>
         <div id="button-container">
           <button class="primary-button" id="start-stop">Start</button>
           <button class="primary-button" id="skip">Skip</button>
@@ -35,7 +40,7 @@
         </div>
       </div>
       <div class="tasks-container" id="tasks-container">
-        <h2 id="task-title">Tasks</h2>
+        <h2 class="subtitle" id="task-title">Tasks</h2>
         <form id="task-form">
           <input type="text" id="task-input" placeholder="Enter a task" required>
           <button type="submit" class="primary-button" id="add-task">Add</button>
@@ -45,19 +50,6 @@
           <ul id="task-list">
           </ul>
         </div>
-      </div>
-      <div id="other-buttons-container">
-        <button class="other-buttons" id="theme-button">
-          <img class="icons" id="theme-icon" src="assets/elixir-brush.png" title="Toggle Theme" />
-        </button>
-        <button class="other-buttons" id="tasks-button">
-          <img class="icons" src="assets/tasks.png" title="Toggle Theme" />
-        </button>
-        <button class="other-buttons" id="download-button" hidden>
-          <a href="https://github.com/kabbagepatch/focus-coffee/releases" target="_blank">
-            <img class="icons" src="assets/download.png" title="Download Desktop Version" />
-          </a>
-        </button>
       </div>
     </main>
   </body>

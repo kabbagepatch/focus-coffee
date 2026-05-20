@@ -20,10 +20,9 @@
   --primary-color: hsl(39, 59%, 78%);
   --primary-color-shadow: hsl(39, 47%, 62%);
   --secondary-color: hsl(18, 71%, 27%);
-  --tertiary-color: hsl(31, 51%, 34%);
-  --background-color: hsl(26, 42%, 19%);
-  --background-color: hsla(26, 42%, 15%, 100%);
-  --background-color-light: hsl(26, 42%, 10%);
+  --tertiary-color: hsl(31, 51%, 54%);
+  --background-color: hsla(26, 42%, 10%, 100%);
+  --background-color-light: hsl(26, 42%, 25%);
   --text-color: hsl(0, 0%, 100%);
   --text-outline: hsl(26, 42%, 19%);
 }
@@ -33,6 +32,14 @@
   justify-content: center;
   gap: 150px;
   padding-right: 15px;
+}
+
+.settings-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
 }
 
 .coffee-container {
@@ -60,7 +67,7 @@
   }
 
   .tasks-container {
-    margin-top: 3vh;
+    margin-top: 40px;
   }
 }
 
@@ -71,44 +78,80 @@ h1 {
   font-size: 3rem;
   line-height: 1.2;
   margin: 0.1em;
-  margin-bottom: 15px;
   padding-right: 15px;
 }
 
-#other-buttons-container {
+#top-buttons-container {
+  top: 15px;
+  right: 15px;
   position: fixed;
-  bottom: 10px;
-  left: 25px;
 }
 
-.other-buttons {
-  background-color: var(--background-color-light);
+.top-button {
+  background: none;
   border: none;
   cursor: pointer;
   width: 40px;
   height: 40px;
   padding: 4px;
-  border-radius: 5px;
-  box-shadow: 0 0.05em 0.1em var(--primary-color-shadow);
-  transition: box-shadow 0.3s;
 }
 
-.other-buttons:active {
-  box-shadow: none;
-  transform: translateY(0.1em);
-}
-
-.other-buttons .icons {
+.top-button .icons {
   width: 100%;
   height: 100%;
 }
 
+.settings-buttons {
+  width: 310px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background-color: var(--background-color-light);
+  border: none;
+  cursor: pointer;
+  padding: 12px 16px;
+  border-radius: 15px;
+  box-shadow: 0 0.05em 0.1em var(--primary-color-shadow);
+  color: var(--primary-color);
+  transition: box-shadow 0.3s;
+  font-size: 20px;
+}
+
+.settings-buttons:active {
+  box-shadow: none;
+  transform: translateY(0.1em);
+}
+
+.settings-buttons .icons {
+  width: 32px;
+  height: 32px;
+}
+
+.settings-buttons-link {
+  text-decoration: none;
+}
+
 h2 {
   color: var(--primary-color);
+}
+
+h2.subtitle {
   background-color: var(--background-color-light);
   margin: 0.2em;
+  margin-bottom: 0.5em;
   padding: 0.5em 1.5em;
   border-radius: 1em;
+}
+
+h2.stats {
+  width: 310px;
+  border-radius: 15px;
+  margin: 0;
+  padding: 0;
+}
+
+h2.stats:first-of-type {
+  margin-top: 20px;
 }
 
 #cup {
@@ -292,7 +335,6 @@ button {
 
   h2 {
     font-size: 1.4rem;
-    margin: 0.2em;
     padding: 0.5em 1.2em;
   }
 
@@ -317,15 +359,8 @@ button {
     font-size: 2rem;
   }
 
-  .other-buttons {
-    width: 35px;
-    height: 35px;
-  }
-
   h2 {
     font-size: 1.2rem;
-    margin: 0.2em;
-    margin-bottom: 0.1em;
     padding: 0.4em 1.1em;
   }
 

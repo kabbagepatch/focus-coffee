@@ -15,7 +15,7 @@ const themes = {
     'primary-color-shadow': 'hsl(39, 59%, 58%)',
     'secondary-color': 'hsl(18, 71%, 27%)',
     'tertiary-color': 'hsl(31, 51%, 54%)',
-    'background-color': 'hsla(26, 42%, 14%, 1.00)',
+    'background-color': 'hsla(26, 42%, 10%, 1.00)',
     'background-color-light': 'hsl(26, 42%, 25%)',
     'text-color': 'hsl(0, 0%, 100%)',
     'text-outline': 'hsl(26, 42%, 19%)',
@@ -73,30 +73,17 @@ const setTheme = (theme) => {
     root.style.setProperty(`--${key}`, value);
   });
 
-  document.getElementById("theme-icon").src = `assets/${theme.toLowerCase()}-brush.png`;
-  document.getElementById('title').textContent = `Focus ${theme}`;
+  const title = document.getElementById('title')
+  if (title) {
+    title.textContent = `Focus ${theme}`;
+  }
+  const drink = document.getElementById('drink-name')
+  if (drink) {
+    drink.textContent = theme;
+  }
 }
 
 setTheme(curTheme);
-document.getElementById('theme-button').addEventListener('click', () => {
-  if (curTheme === 'Elixir') {
-    setTheme('Coffee');
-  } else if (curTheme === 'Coffee') {
-    setTheme('Matcha');
-  } else if (curTheme === 'Matcha') {
-    setTheme('Lemonade');
-  } else if (curTheme === 'Lemonade') {
-    setTheme('Water');
-  } else if (curTheme === 'Water') {
-    setTheme('Cola');
-  } else {
-    setTheme('Elixir');
-  }
-});
-
-if (!window.__TAURI__) {
-  document.getElementById('download-button').hidden = false;
-}
 
 let tabbedAway = false;
 document.addEventListener('visibilitychange', function() {
@@ -135,6 +122,8 @@ const updateDisplay = (m = M, s = S) => {
   secondsDisplay.textContent = String(s).padStart(2, '0');
 };
 
+let totalSessionCount = parseInt(localStorage.getItem('total-session-count') || '0');
+
 const startTimer = (reverse=false) => {
   if (sessionTimer) {
     clearInterval(sessionTimer);
@@ -171,8 +160,12 @@ const startTimer = (reverse=false) => {
       clearInterval(sessionTimer);
       updateDisplay(0, 0);
       cup.style.setProperty('--fill-level', reverse ? '100%' : '0%');
-      startButton.textContent = (sessionType === 'focus' ? 'Start Break' : 'Next Session');
+      startButton.textContent = 'Next';
       sessionDisplay.textContent = (sessionType === 'focus' ? 'Focus' : 'Break') + ' Session Completed!';
+      if (sessionType === 'focus') {
+        totalSessionCount += 1;
+        localStorage.setItem('total-session-count', totalSessionCount);
+      }
       if (tabbedAway && !window.__TAURI__) {
         document.title = 'Session Complete!';
         alert('Session Complete!');
@@ -208,7 +201,7 @@ const pauseTimer = () => {
 const startFocusSession = () => {
   console.log('Focus Session Started');
   M = focusTime - 1;
-  S = 59;
+  S = 5;
   startTimer();
   sessionType = 'focus';
   sessionStatus = 'running';
@@ -310,7 +303,7 @@ const setPomo = (f, b) => {
 
 const option25 = document.getElementById('25-5');
 option25.addEventListener('click', () => {
-  setPomo(25, 5);
+  setPomo(1, 5);
   option25.className = "session-option session-option-selected";
   option50.className = "session-option";
   option75.className = "session-option";
@@ -338,12 +331,8 @@ let tasksDisplayed = localStorage.getItem('displayTasks') || 'false';
 if (tasksDisplayed === 'true') {
   taskContainer.style.display = 'flex';
 }
-document.getElementById('tasks-button').addEventListener('click', () => {
-  taskContainer.style.display = tasksDisplayed === 'true' ? 'none' : 'flex';
-  tasksDisplayed = tasksDisplayed === 'true' ? 'false' : 'true';
-  localStorage.setItem('displayTasks', tasksDisplayed);
-});
 
+let totalTaskCount = parseInt(localStorage.getItem('total-task-count') || '0');
 const tasks = [];
 let completedTasks = 0;
 const taskTitle = document.getElementById('task-title');
@@ -358,9 +347,13 @@ document.getElementById('task-form').addEventListener('submit', (e) => {
   newTask.onclick = () => {
     if (newTask.className == "task-complete") {
       completedTasks -= 1;
+      totalTaskCount -= 1;
+      localStorage.setItem('total-task-count', totalTaskCount);
       newTask.className = "";
     } else {
       completedTasks += 1;
+      totalTaskCount += 1;
+      localStorage.setItem('total-task-count', totalTaskCount);
       newTask.className = "task-complete";
     }
     taskTitle.textContent = `Tasks ${completedTasks}/${tasks.length}`;
