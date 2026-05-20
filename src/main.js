@@ -81,6 +81,7 @@ const setTheme = (theme) => {
   if (drink) {
     drink.textContent = theme;
   }
+  document.getElementById("settings-icon").src = `./assets/settings-${theme.toLowerCase()}.png`;
 }
 
 setTheme(curTheme);
@@ -201,7 +202,7 @@ const pauseTimer = () => {
 const startFocusSession = () => {
   console.log('Focus Session Started');
   M = focusTime - 1;
-  S = 5;
+  S = 59;
   startTimer();
   sessionType = 'focus';
   sessionStatus = 'running';
@@ -215,7 +216,7 @@ const startBreakSession = () => {
   startTimer(true);
   sessionType = 'break';
   sessionStatus = 'running';
-  sessionDisplay.textContent = 'Break Time! Refill your cup';
+  sessionDisplay.textContent = 'Refill your cup';
 };
 
 const skip = () => {
@@ -303,7 +304,7 @@ const setPomo = (f, b) => {
 
 const option25 = document.getElementById('25-5');
 option25.addEventListener('click', () => {
-  setPomo(1, 5);
+  setPomo(25, 5);
   option25.className = "session-option session-option-selected";
   option50.className = "session-option";
   option75.className = "session-option";

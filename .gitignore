@@ -26,3 +26,4 @@ dist-ssr
 src/live-html-147
 src-tauri/gen
 *.aab
+bundles
