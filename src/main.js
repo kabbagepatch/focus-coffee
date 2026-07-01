@@ -303,65 +303,86 @@ const setPomo = (f, b) => {
 };
 
 const option25 = document.getElementById('25-5');
-option25.addEventListener('click', () => {
-  setPomo(25, 5);
-  option25.className = "session-option session-option-selected";
-  option50.className = "session-option";
-  option75.className = "session-option";
-});
-
 const option50 = document.getElementById('50-10');
-option50.addEventListener('click', () => {
-  setPomo(50, 10);
-  option25.className = "session-option";
-  option50.className = "session-option session-option-selected";
-  option75.className = "session-option";
-});
-
 const option75 = document.getElementById('75-15');
-option75.addEventListener('click', () => {
-  setPomo(75, 15);
+
+const selectOption = (id) => {
   option25.className = "session-option";
   option50.className = "session-option";
-  option75.className = "session-option session-option-selected";
-});
+  option75.className = "session-option";
+  document.getElementById(id).className = "session-option session-option-selected";
+  localStorage.setItem('session-option', id);
+  if (id === '25-5') setPomo(25, 5);
+  else if (id === '50-10') setPomo(50, 10);
+  else if (id === '75-15') setPomo(75, 15);
+};
+
+option25.addEventListener('click', () => selectOption('25-5'));
+option50.addEventListener('click', () => selectOption('50-10'));
+option75.addEventListener('click', () => selectOption('75-15'));
+
+selectOption(localStorage.getItem('session-option') || '50-10');
 
 
 const taskContainer = document.getElementById('tasks-container');
-let tasksDisplayed = localStorage.getItem('displayTasks') || 'false';
+let tasksDisplayed = 'true'; //localStorage.getItem('displayTasks') || 'false';
 if (tasksDisplayed === 'true') {
   taskContainer.style.display = 'flex';
 }
 
 let totalTaskCount = parseInt(localStorage.getItem('total-task-count') || '0');
-const tasks = [];
-let completedTasks = 0;
+const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+let completedTasks = tasks.filter(t => t.complete).length;
 const taskTitle = document.getElementById('task-title');
 const taskInput = document.getElementById('task-input');
 const taskList = document.getElementById('task-list');
-document.getElementById('task-form').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const newTask = document.createElement("li");
-  newTask.textContent = taskInput.value;
-  const key = tasks.length;
-  newTask.value = key;
-  newTask.onclick = () => {
-    if (newTask.className == "task-complete") {
+const clearButton = document.getElementById('clear-tasks');
+if (tasks.length > 0) clearButton.style.display = 'inline';
+
+const saveTasks = () => localStorage.setItem('tasks', JSON.stringify(tasks));
+
+const renderTask = (taskData, index) => {
+  const li = document.createElement("li");
+  li.textContent = taskData.text;
+  if (taskData.complete) li.className = "task-complete";
+  li.onclick = () => {
+    if (taskData.complete) {
+      taskData.complete = false;
       completedTasks -= 1;
-      totalTaskCount -= 1;
-      localStorage.setItem('total-task-count', totalTaskCount);
-      newTask.className = "";
+      li.className = "";
     } else {
+      taskData.complete = true;
       completedTasks += 1;
       totalTaskCount += 1;
       localStorage.setItem('total-task-count', totalTaskCount);
-      newTask.className = "task-complete";
+      li.className = "task-complete";
     }
+    saveTasks();
     taskTitle.textContent = `Tasks ${completedTasks}/${tasks.length}`;
-  }
-  taskList.appendChild(newTask);
-  tasks.push(taskInput.value);
+  };
+  taskList.appendChild(li);
+};
+
+tasks.forEach((task, i) => renderTask(task, i));
+taskTitle.textContent = `Tasks ${completedTasks}/${tasks.length}`;
+
+document.getElementById('task-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const taskData = { text: taskInput.value, complete: false };
+  tasks.push(taskData);
+  clearButton.style.display = 'inline'
+  saveTasks();
+  renderTask(taskData, tasks.length - 1);
   taskInput.value = '';
   taskTitle.textContent = `Tasks ${completedTasks}/${tasks.length}`;
+});
+
+clearButton.addEventListener('click', () => {
+  tasks.length = 0;
+  completedTasks = 0;
+  saveTasks();
+  taskList.innerHTML = '';
+  taskTitle.textContent = `Tasks 0/0`;
+  clearButton.style.display = 'none'
 });
 

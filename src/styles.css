@@ -288,12 +288,23 @@ button {
   font-size: 16px;
 }
 
-#add-task {
+#add-task, #clear-tasks {
   width: auto;
   display: inline;
   padding: 5px 10px;
   font-size: 16px;
   height: 30px;
+}
+
+#clear-tasks-container {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#clear-tasks {
+  display: none;
+  width: 150px;
 }
 
 #task-list-container {
@@ -303,7 +314,7 @@ button {
 #task-list {
   margin: 0;
   margin-top: 10px;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   padding: 0;
 }
 
