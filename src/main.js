@@ -325,7 +325,7 @@ selectOption(localStorage.getItem('session-option') || '50-10');
 
 
 const taskContainer = document.getElementById('tasks-container');
-let tasksDisplayed = 'true'; //localStorage.getItem('displayTasks') || 'false';
+let tasksDisplayed = localStorage.getItem('displayTasks') || 'false';
 if (tasksDisplayed === 'true') {
   taskContainer.style.display = 'flex';
 }
