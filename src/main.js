@@ -96,6 +96,13 @@ document.addEventListener('visibilitychange', function() {
   }
 });
 
+const cup = document.getElementById('cup');
+const startButton = document.getElementById('start-stop');
+const sessionCountDisplay = document.getElementById('session-count');
+const sessionDisplay = document.getElementById('session-type');
+const minutesDisplay = document.getElementById('minutes');
+const secondsDisplay = document.getElementById('seconds');
+
 const DEFAULT_SESSION_COUNT = 4;
 const DEFAULT_FOCUS_TIME = 50; // minutes
 const DEFAULT_BREAK_TIME = 10; // minutes
@@ -111,12 +118,15 @@ let totalSessions = DEFAULT_SESSION_COUNT;
 let M = 0;
 let S = 0;
 
-const cup = document.getElementById('cup');
-const startButton = document.getElementById('start-stop');
-const sessionCountDisplay = document.getElementById('session-count');
-const sessionDisplay = document.getElementById('session-type');
-const minutesDisplay = document.getElementById('minutes');
-const secondsDisplay = document.getElementById('seconds');
+const saveSessionState = () => {
+  localStorage.setItem('session-state', JSON.stringify({
+    sessionStatus,
+    sessionType,
+    sessionCount,
+    saveTime: Date.now(),
+    timeRemaining: (M * 60 + S),
+  }));
+};
 
 const updateDisplay = (m = M, s = S) => {
   minutesDisplay.textContent = String(m).padStart(2, '0');
@@ -124,7 +134,6 @@ const updateDisplay = (m = M, s = S) => {
 };
 
 let totalSessionCount = parseInt(localStorage.getItem('total-session-count') || '0');
-
 const startTimer = (reverse=false) => {
   if (sessionTimer) {
     clearInterval(sessionTimer);
@@ -167,6 +176,7 @@ const startTimer = (reverse=false) => {
         totalSessionCount += 1;
         localStorage.setItem('total-session-count', totalSessionCount);
       }
+      saveSessionState();
       if (tabbedAway && !window.__TAURI__) {
         document.title = 'Session Complete!';
         alert('Session Complete!');
@@ -183,21 +193,40 @@ const startTimer = (reverse=false) => {
   }, 500);
 };
 
-const resetTimer = () => {
-  sessionStatus = 'stopped';
-  sessionType = 'focus';
-  if (sessionTimer) {
-    clearInterval(sessionTimer);
-  }
-  updateDisplay(0, 0);
-};
+const restoreSessionState = () => {
+  const state = JSON.parse(localStorage.getItem('session-state'));
+  if (!state) return;
+  sessionStatus = state.sessionStatus;
+  sessionType = state.sessionType;
+  sessionCount = state.sessionCount;
+  if (sessionStatus === 'stopped') return;
+  sessionCountDisplay.textContent = `Session ${sessionCount}/${totalSessions}`;
 
-const pauseTimer = () => {
-  if (sessionTimer) {
-    clearInterval(sessionTimer);
+  let remainingMs;
+  if (sessionStatus === 'paused') {
+    remainingMs = state.timeRemaining * 1000;
+    M = Math.max(0, Math.floor(remainingMs / (1000 * 60)));
+    S = Math.max(0, Math.floor(remainingMs / 1000) % 60);
+    updateDisplay();
+  } else {
+    const elapsedMs = Date.now() - state.saveTime;
+    remainingMs = state.timeRemaining * 1000 - elapsedMs;
+    M = Math.max(0, Math.floor(remainingMs / (1000 * 60)));
+    S = Math.max(0, Math.floor(remainingMs / 1000) % 60);
   }
-  sessionStatus = 'paused';
-};
+
+  startButton.textContent = sessionStatus === 'running' ? 'Pause' : 'Start';
+  sessionDisplay.textContent = sessionType === 'focus' ? 'Focus Time!' : 'Refill your cup';
+  if (sessionStatus === 'completed') {
+    startButton.textContent = 'Next';
+    sessionDisplay.textContent = (sessionType === 'focus' ? 'Focus' : 'Break') + ' Session Completed!';
+  }
+
+  if (remainingMs > 0 && sessionStatus === 'running') {
+    startTimer(sessionType === 'break');
+  }
+}
+restoreSessionState()
 
 const startFocusSession = () => {
   console.log('Focus Session Started');
@@ -207,6 +236,7 @@ const startFocusSession = () => {
   sessionType = 'focus';
   sessionStatus = 'running';
   sessionDisplay.textContent = 'Focus Time!';
+  saveSessionState();
 }
 
 const startBreakSession = () => {
@@ -217,6 +247,7 @@ const startBreakSession = () => {
   sessionType = 'break';
   sessionStatus = 'running';
   sessionDisplay.textContent = 'Refill your cup';
+  saveSessionState();
 };
 
 const skip = () => {
@@ -243,8 +274,28 @@ const skip = () => {
   }
 };
 
+const pause = () => {
+  if (sessionTimer) {
+    clearInterval(sessionTimer);
+  }
+  sessionStatus = 'paused';
+  startButton.textContent = 'Start';
+  saveSessionState();
+};
+
+const resume = () => {
+  sessionStatus = 'running';
+  startButton.textContent = 'Pause';
+  saveSessionState();
+  startTimer(sessionType === 'break');
+}
+
+
 const reset = () => {
-  resetTimer();
+  if (sessionTimer) {
+    clearInterval(sessionTimer);
+  }
+  updateDisplay(0, 0);
   sessionCount = 0;
   sessionStatus = 'stopped';
   sessionType = 'focus';
@@ -252,40 +303,34 @@ const reset = () => {
   sessionDisplay.textContent = 'Focus Time!';
   startButton.textContent = 'Start';
   cup.style.setProperty('--fill-level', '0%');
+  saveSessionState();
 };
 
 startButton.addEventListener('click', () => {
-  if (sessionStatus === 'running') {
-    // Pause the session
-    pauseTimer();
-    startButton.textContent = 'Start';
-  } else if (sessionStatus === 'paused') {
-    // Resume the session
-    sessionStatus = 'running';
-    startButton.textContent = 'Pause';
-    startTimer(sessionType === 'break');
-  } else if (sessionStatus === 'stopped') {
-    // Start a new session
-    sessionCount = 1;
-    sessionCountDisplay.textContent = `Session ${sessionCount}/${totalSessions}`;
-    startFocusSession();
-    sessionStatus = 'running';
-    startButton.textContent = 'Pause';
-  } else if (sessionStatus === 'completed') {
-    sessionStatus = 'running';
-    startButton.textContent = 'Pause';
-    // Move to the next session
-    if (sessionType === 'focus') {
-      startBreakSession();
-    } else {
-      sessionCount += 1;
-      if (sessionCount > totalSessions) {
-        reset();
-        return;
-      }
-      startFocusSession();
+  switch (sessionStatus) {
+    case 'running': pause(); break;
+    case 'paused': resume(); break;
+    case 'stopped':
+      sessionCount = 1;
       sessionCountDisplay.textContent = `Session ${sessionCount}/${totalSessions}`;
-    }
+      startFocusSession();
+      startButton.textContent = 'Pause';
+      break;
+    case 'completed':
+      startButton.textContent = 'Pause';
+      // Move to the next session
+      if (sessionType === 'focus') {
+        startBreakSession();
+      } else {
+        sessionCount += 1;
+        if (sessionCount > totalSessions) {
+          reset();
+          return;
+        }
+        startFocusSession();
+        sessionCountDisplay.textContent = `Session ${sessionCount}/${totalSessions}`;
+      }
+      break;
   }
 });
 
@@ -301,6 +346,8 @@ const setPomo = (f, b) => {
   focusTime = f;
   breakTime = b;
 };
+
+/* --- SESSION OPTIONS --- */
 
 const option25 = document.getElementById('25-5');
 const option50 = document.getElementById('50-10');
@@ -323,6 +370,7 @@ option75.addEventListener('click', () => selectOption('75-15'));
 
 selectOption(localStorage.getItem('session-option') || '50-10');
 
+/* --- TASKS LIST --- */
 
 const taskContainer = document.getElementById('tasks-container');
 let tasksDisplayed = localStorage.getItem('displayTasks') || 'false';
