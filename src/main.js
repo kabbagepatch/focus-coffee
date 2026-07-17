@@ -117,6 +117,7 @@ let totalSessions = DEFAULT_SESSION_COUNT;
 
 let M = 0;
 let S = 0;
+let totalSeconds = 0;
 
 const saveSessionState = () => {
   localStorage.setItem('session-state', JSON.stringify({
@@ -125,6 +126,7 @@ const saveSessionState = () => {
     sessionCount,
     saveTime: Date.now(),
     timeRemaining: (M * 60 + S),
+    totalSeconds,
   }));
 };
 
@@ -133,8 +135,18 @@ const updateDisplay = (m = M, s = S) => {
   secondsDisplay.textContent = String(s).padStart(2, '0');
 };
 
+const updateSessionCountDisplay = () => {
+  sessionCountDisplay.textContent = `Session ${sessionCount}/${totalSessions}`;
+};
+
+const updateCupFillLevel = (remainingSeconds) => {
+  let fraction = Math.max(0, (remainingSeconds / totalSeconds).toFixed(4));
+  if (sessionType === 'break') fraction = 1 - fraction;
+  cup.style.setProperty('--fill-level', fraction * 100 + '%');
+};
+
 let totalSessionCount = parseInt(localStorage.getItem('total-session-count') || '0');
-const startTimer = (reverse=false) => {
+const startTimer = () => {
   if (sessionTimer) {
     clearInterval(sessionTimer);
   }
@@ -142,18 +154,12 @@ const startTimer = (reverse=false) => {
   console.log(`Timer started for ${M}m ${S}s at ${new Date(startTime).toLocaleTimeString()}`);
   const startM = M;
   const startS = S;
-  const totalDrainTime = (startM * 60 + startS) * 1000; // in ms
+  const remainingDrainTime = (startM * 60 + startS); // in s
   updateDisplay();
-  cup.style.setProperty('--fill-level', reverse ? '0%' : '100%');
-  let percent = 100;
+  updateCupFillLevel(remainingDrainTime);
   sessionTimer = setInterval(() => {
     const elapsed = Date.now() - startTime;
-    percent = Math.max(0, 1 - (elapsed / totalDrainTime).toFixed(4));
-    if (reverse) {
-      percent = 1 - percent;
-    }
-    percent = cup.style.setProperty('--fill-level', percent * 100 + '%');
-
+    updateCupFillLevel(remainingDrainTime - (elapsed / 1000).toFixed(4))
     const secondsElapsedTotal = Math.floor(elapsed / 1000);
     const minutesElapsed = Math.floor(secondsElapsedTotal / 60);
     const secondsElapsed = secondsElapsedTotal % 60;
@@ -169,7 +175,7 @@ const startTimer = (reverse=false) => {
       sessionStatus = 'completed';
       clearInterval(sessionTimer);
       updateDisplay(0, 0);
-      cup.style.setProperty('--fill-level', reverse ? '100%' : '0%');
+      updateCupFillLevel(0);
       startButton.textContent = 'Next';
       sessionDisplay.textContent = (sessionType === 'focus' ? 'Focus' : 'Break') + ' Session Completed!';
       if (sessionType === 'focus') {
@@ -199,31 +205,33 @@ const restoreSessionState = () => {
   sessionStatus = state.sessionStatus;
   sessionType = state.sessionType;
   sessionCount = state.sessionCount;
+  totalSeconds = state.totalSeconds;
+
   if (sessionStatus === 'stopped') return;
-  sessionCountDisplay.textContent = `Session ${sessionCount}/${totalSessions}`;
 
   let remainingMs;
   if (sessionStatus === 'paused') {
     remainingMs = state.timeRemaining * 1000;
-    M = Math.max(0, Math.floor(remainingMs / (1000 * 60)));
-    S = Math.max(0, Math.floor(remainingMs / 1000) % 60);
-    updateDisplay();
   } else {
     const elapsedMs = Date.now() - state.saveTime;
     remainingMs = state.timeRemaining * 1000 - elapsedMs;
-    M = Math.max(0, Math.floor(remainingMs / (1000 * 60)));
-    S = Math.max(0, Math.floor(remainingMs / 1000) % 60);
   }
 
+  sessionCountDisplay.textContent = `Session ${sessionCount}/${totalSessions}`;
   startButton.textContent = sessionStatus === 'running' ? 'Pause' : 'Start';
   sessionDisplay.textContent = sessionType === 'focus' ? 'Focus Time!' : 'Refill your cup';
-  if (sessionStatus === 'completed') {
+  if (sessionStatus === 'completed' || sessionStatus === 'running' && remainingMs <= 0) {
+    sessionStatus = 'completed';
     startButton.textContent = 'Next';
     sessionDisplay.textContent = (sessionType === 'focus' ? 'Focus' : 'Break') + ' Session Completed!';
   }
+  M = Math.max(0, Math.floor(remainingMs / (1000 * 60)));
+  S = Math.max(0, Math.floor(remainingMs / 1000) % 60);
+  updateDisplay();
+  updateCupFillLevel(Math.max(0, remainingMs / 1000));
 
   if (remainingMs > 0 && sessionStatus === 'running') {
-    startTimer(sessionType === 'break');
+    startTimer();
   }
 }
 restoreSessionState()
@@ -232,22 +240,24 @@ const startFocusSession = () => {
   console.log('Focus Session Started');
   M = focusTime - 1;
   S = 59;
-  startTimer();
+  totalSeconds = M * 60 + S;
   sessionType = 'focus';
   sessionStatus = 'running';
   sessionDisplay.textContent = 'Focus Time!';
   saveSessionState();
+  startTimer();
 }
 
 const startBreakSession = () => {
   console.log('Break Session Started');
   M = breakTime - 1;
   S = 59;
-  startTimer(true);
+  totalSeconds = M * 60 + S;
   sessionType = 'break';
   sessionStatus = 'running';
   sessionDisplay.textContent = 'Refill your cup';
   saveSessionState();
+  startTimer();
 };
 
 const skip = () => {
@@ -287,7 +297,7 @@ const resume = () => {
   sessionStatus = 'running';
   startButton.textContent = 'Pause';
   saveSessionState();
-  startTimer(sessionType === 'break');
+  startTimer();
 }
 
 
@@ -302,7 +312,7 @@ const reset = () => {
   sessionCountDisplay.textContent = `Session ${sessionCount}/${totalSessions}`;
   sessionDisplay.textContent = 'Focus Time!';
   startButton.textContent = 'Start';
-  cup.style.setProperty('--fill-level', '0%');
+  updateCupFillLevel(0);
   saveSessionState();
 };
 
