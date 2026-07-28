@@ -45,7 +45,7 @@
   margin: 0;
   display: none;
   flex-direction: column;
-  width: 300px;
+  min-width: 300px;
 }
 
 h1 {
@@ -346,7 +346,7 @@ button {
 #clear-tasks-container {
   width: 100%;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 #clear-tasks {
@@ -370,12 +370,9 @@ button {
   cursor: pointer;
   list-style: none;
   padding: 8px 12px;
+  margin: 2px 0;
   transition: background-color 0.3s;
   border-radius: 5px;
-}
-
-#task-list li:hover {
-  background-color: var(--color-cup);
 }
 
 #task-list li:active {
@@ -410,7 +407,7 @@ button {
   }
 
   .tasks-container {
-    margin-top: 40px;
+    margin-top: 50px;
   }
 
   .ice-cube {

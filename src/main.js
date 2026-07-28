@@ -551,6 +551,7 @@ document.getElementById('task-form').addEventListener('submit', (e) => {
   renderTask(taskData, tasks.length - 1);
   taskInput.value = '';
   taskTitle.textContent = `Tasks ${completedTasks}/${tasks.length}`;
+  taskInput.focus();
 });
 
 clearButton.addEventListener('click', () => {
