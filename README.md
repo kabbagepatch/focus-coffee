@@ -15,6 +15,6 @@ A simple web/desktop Coffee Pomo timer made using Tauri, with different themes a
 ```
 yarn tauri android build
 cp .\src-tauri\gen\android\app\build\outputs\bundle\universalRelease\app-universal-release.aab .\
-cp .\app-universal-release.aab .\bundles\app-universal-release-1006.aab
+cp .\app-universal-release.aab .\bundles\app-universal-release-1009.aab
 & "C:\Program Files\Android\Android Studio\jbr\bin\jarsigner.exe" -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore ..\my-release-key.jks app-universal-release.aab my-key-alias
 ```

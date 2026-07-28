@@ -1,67 +1,99 @@
+let isDesktop = false;
+let isAndroid = false;
+if (window.__TAURI__) {
+  const { platform } = window.__TAURI__.os;
+  const currentPlatform = platform();
+  isDesktop = ['windows', 'macos', 'linux'].includes(currentPlatform);
+  isAndroid = currentPlatform === 'android';
+}
+
 let curTheme = localStorage.getItem('theme') || 'Coffee';
+
 const themes = {
-  'Elixir': {
-    'primary-color': 'hsl(336, 89%, 93%)',
-    'primary-color-shadow': 'hsl(336, 47%, 62%)',
-    'secondary-color': 'hsl(336, 100%, 70%)',
-    'tertiary-color': 'hsl(336, 100%, 87%)',
-    'background-color': 'hsla(307, 47%, 18%, 1.00)',
-    'background-color-light': 'hsl(307, 47%, 25%)',
-    'text-color': 'white',
-    'text-outline': 'hsl(276, 100%, 25%)'
-  },
   'Coffee': {
-    'primary-color': 'hsl(39, 59%, 78%)',
-    'primary-color-shadow': 'hsl(39, 59%, 58%)',
-    'secondary-color': 'hsl(18, 71%, 27%)',
-    'tertiary-color': 'hsl(31, 51%, 54%)',
-    'background-color': 'hsla(26, 42%, 10%, 1.00)',
-    'background-color-light': 'hsl(26, 42%, 25%)',
-    'text-color': 'hsl(0, 0%, 100%)',
-    'text-outline': 'hsl(26, 42%, 19%)',
+    'color-header': 'hsl(25, 29%, 18%)',
+    'color-shadow': 'hsl(25, 29%, 25%)',
+    'color-subheader': 'hsl(345, 7%, 89%)',
+    'color-drink': 'hsl(6, 27%, 15%)',
+    'color-background': 'hsla(32, 50%, 77%, 1.00)',
+    'color-cup': 'hsl(23, 40%, 39%)',
+    'color-text': 'hsl(345, 7%, 89%)',
+    'color-text-shadow': 'hsl(26, 42%, 19%)',
+  },
+  'Latte': {
+    'color-header': 'hsl(39, 59%, 78%)',
+    'color-shadow': 'hsl(39, 59%, 58%)',
+    'color-subheader': 'hsl(39, 59%, 78%)',
+    'color-drink': 'hsl(31, 51%, 54%)',
+    'color-background': 'hsla(26, 42%, 10%, 1.00)',
+    'color-cup': 'hsl(26, 42%, 25%)',
+    'color-text': 'hsl(0, 0%, 100%)',
+    'color-text-shadow': 'hsl(26, 42%, 19%)',
+  },
+  'Elixir': {
+    'color-header': 'hsl(336, 89%, 93%)',
+    'color-shadow': 'hsl(336, 47%, 62%)',
+    'color-subheader': 'hsl(307, 47%, 25%)',
+    'color-drink': 'hsl(336, 100%, 87%)',
+    'color-background': 'hsla(307, 47%, 18%, 1.00)',
+    'color-cup': 'hsl(336, 100%, 70%)',
+    'color-text': 'white',
+    'color-text-shadow': 'hsl(276, 100%, 25%)'
   },
   'Matcha': {
-    'primary-color': 'hsl(60, 63%, 89%)',
-    'primary-color-shadow': 'hsl(60, 63%, 69%)',
-    'secondary-color': 'hsl(77, 14%, 45%)',
-    'tertiary-color': 'hsl(101, 41%, 74%)',
-    'background-color': 'hsla(227, 8%, 22%, 1.00)',
-    'background-color-light': 'hsl(227, 8%, 38%)',
-    'text-color': 'hsl(0, 0%, 100%)',
-    'text-outline': 'hsl(26, 62%, 18%)'
+    'color-header': 'hsl(60, 63%, 89%)',
+    'color-shadow': 'hsl(60, 63%, 69%)',
+    'color-subheader': 'hsl(60, 63%, 89%)',
+    'color-drink': 'hsl(101, 41%, 74%)',
+    'color-background': 'hsla(227, 8%, 22%, 1.00)',
+    'color-cup': 'hsl(227, 8%, 38%)',
+    'color-text': 'hsl(0, 0%, 100%)',
+    'color-text-shadow': 'hsl(26, 62%, 18%)'
   },
   'Lemonade': {
-    'primary-color': 'hsl(48, 100%, 85%)',
-    'primary-color-shadow': 'hsl(48, 100%, 65%)',
-    'secondary-color': 'hsl(204, 100%, 50%)',
-    'tertiary-color': 'hsl(48, 100%, 85%)',
-    'background-color': 'hsla(210, 100%, 16%, 1.00)',
-    'background-color-light': 'hsl(210, 100%, 22%)',
-    'text-color': 'hsl(0, 0%, 100%)',
-    'text-outline': 'hsl(210, 100%, 21%)'
+    'color-header': 'hsl(48, 100%, 85%)',
+    'color-shadow': 'hsl(48, 100%, 65%)',
+    'color-subheader': 'hsl(204, 100%, 80%)',
+    'color-drink': 'hsl(48, 100%, 85%)',
+    'color-background': 'hsla(210, 100%, 16%, 1.00)',
+    'color-cup': 'hsl(210, 100%, 28%)',
+    'color-text': 'hsl(0, 0%, 100%)',
+    'color-text-shadow': 'hsl(210, 100%, 21%)'
   },
   'Water': {
-    'primary-color': 'hsl(215, 87%, 12%)',
-    'primary-color-shadow': 'hsl(169, 44%, 83%)',
-    'secondary-color': 'hsl(169, 58%, 91%)',
-    'tertiary-color': 'hsl(169, 58%, 91%)',
-    'background-color': 'hsla(203, 55%, 54%, 1.00)',
-    'background-color-light': 'hsl(203, 72%, 62%)',
-    'text-color': 'hsl(215, 87%, 12%)',
-    'text-outline': 'hsl(185, 64%, 89%)'
+    'color-header': 'hsl(215, 87%, 12%)',
+    'color-shadow': 'hsl(169, 44%, 83%)',
+    'color-subheader': 'hsl(169, 58%, 91%)',
+    'color-drink': 'hsl(169, 58%, 91%)',
+    'color-background': 'hsla(203, 55%, 54%, 1.00)',
+    'color-cup': 'hsl(203, 72%, 62%)',
+    'color-text': 'hsl(215, 87%, 12%)',
+    'color-text-shadow': 'hsl(185, 64%, 89%)'
   },
   'Cola': {
-    'primary-color': 'hsl(0, 0%, 100%)',
-    'primary-color-shadow': 'hsl(0, 0%, 14%)',
-    'secondary-color': 'hsl(358, 100%, 48%)',
-    'tertiary-color': 'hsl(0, 0%, 0%)',
-    'background-color': 'hsla(0, 0%, 0%, 1.00)',
-    'background-color-light': 'hsl(358, 100%, 48%)',
-    'text-color': 'hsl(0, 0%, 100%)',
-    'text-outline': 'hsl(0, 0%, 0%)'
+    'color-header': 'hsl(0, 0%, 100%)',
+    'color-shadow': 'hsl(0, 0%, 14%)',
+    'color-subheader': 'hsl(0, 0%, 100%)',
+    'color-drink': 'hsl(0, 0%, 0%)',
+    'color-background': 'hsla(0, 0%, 15%, 1.00)',
+    'color-cup': 'hsl(358, 100%, 48%)',
+    'color-text': 'hsl(0, 0%, 100%)',
+    'color-text-shadow': 'hsl(0, 0%, 0%)'
   },
 };
+if (isDesktop) {
+  for (let theme in themes) {
+    themes[theme]['color-background'] = themes[theme]['color-background'].replace('1.00', '0.60');
+  }
+}
+if (isAndroid) {
+  document.getElementById('top-buttons-container').style.top = '40px';
+  document.getElementById('top-buttons-container').style.left = '12px';
+  document.querySelector(':root').style.paddingTop = '60px';
+}
 
+let animationVisible = false;
+let animationType = 'steam';
 const setTheme = (theme) => {
   if (!Object.keys(themes).includes(theme)) return;
   localStorage.setItem('theme', theme);
@@ -81,7 +113,20 @@ const setTheme = (theme) => {
   if (drink) {
     drink.textContent = theme;
   }
-  document.getElementById("settings-icon").src = `./assets/settings-${theme.toLowerCase()}.png`;
+
+  if (['Elixir', 'Lemonade', 'Water', 'Cola'].includes(theme)) {
+    animationType = 'ice';
+    document.querySelector('#coffee-container').classList.add('no-after');
+    document.getElementById('cup').style.borderRadius = '30%';
+    document.getElementById('cup').style.borderTopLeftRadius = '3%';
+    document.getElementById('cup').style.borderTopRightRadius = '3%';
+  } else {
+    animationType = 'steam';
+    document.querySelector('#coffee-container').classList.remove('no-after');
+    document.getElementById('cup').style.borderRadius = '50%';
+    document.getElementById('cup').style.borderTopLeftRadius = '3%';
+    document.getElementById('cup').style.borderTopRightRadius = '3%';
+  }
 }
 
 setTheme(curTheme);
@@ -114,7 +159,6 @@ let sessionCount = 0;
 let focusTime = DEFAULT_FOCUS_TIME;
 let breakTime = DEFAULT_BREAK_TIME;
 let totalSessions = DEFAULT_SESSION_COUNT;
-
 let M = 0;
 let S = 0;
 let totalSeconds = 0;
@@ -143,7 +187,80 @@ const updateCupFillLevel = (remainingSeconds) => {
   let fraction = Math.max(0, (remainingSeconds / totalSeconds).toFixed(4));
   if (sessionType === 'break') fraction = 1 - fraction;
   cup.style.setProperty('--fill-level', fraction * 100 + '%');
+  if (fraction > 0.7) {
+    if (animationVisible) return;
+    if (animationType === 'steam') {
+      showSteam();
+    } else {
+      showIce();
+    }
+  } else {
+    if (!animationVisible) return;
+    if (animationType === 'steam') {
+      hideSteam();
+    } else {
+      hideIce();
+    }
+  }
 };
+
+const showSteam = () => {
+  setTimeout(() => {
+    const steamElements = document.querySelectorAll('.steam');
+    steamElements.forEach(el => {
+      el.style.display = 'block';
+    });
+    animationVisible = true;
+  }, 200);
+}
+
+const hideSteam = () => {
+  const steamElements = document.querySelectorAll('.steam');
+  steamElements.forEach(el => {
+    el.style.display = 'none';
+  });
+  animationVisible = false;
+}
+
+function getRandomNumber(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+const showIce = () => {
+  const iceCubes = document.querySelectorAll('.ice-cube');
+  iceCubes.forEach((cube, index) => {
+    cube.style.display = 'block';
+    cube.style.transition = 'none';
+    cube.style.transform = 'none';
+    cube.style.opacity = '1';
+    cube.offsetHeight;
+
+    cube.style.left = `${cube.clientWidth / 3 + index * cube.clientWidth * 1.3}px`;
+    setTimeout(() => {
+      cube.style.transition = `top 2s ease ${index * 0.25}s, transform 2s ease ${index * 0.25}s`;
+      const randomNumber = getRandomNumber(80, 100);
+      cube.style.top = `${randomNumber}px`;
+      
+      const randomNumber2 = getRandomNumber(270, 380);
+      cube.style.transform = `rotate(${randomNumber2}deg)`;
+    }, 10);
+
+    setTimeout(() => {
+      cube.style.transition = `top 2s ease`;
+      const randomNumber = getRandomNumber(27, 35);
+      cube.style.top = `${randomNumber}px`;
+    }, (index * 200) + 1000);
+  });
+  animationVisible = true;
+}
+
+const hideIce = () => {
+  const steamElements = document.querySelectorAll('.ice-cube');
+  steamElements.forEach(el => {
+    el.style.display = 'none';
+  });
+  animationVisible = false;
+}
 
 let totalSessionCount = parseInt(localStorage.getItem('total-session-count') || '0');
 const startTimer = () => {
@@ -299,7 +416,6 @@ const resume = () => {
   saveSessionState();
   startTimer();
 }
-
 
 const reset = () => {
   if (sessionTimer) {
