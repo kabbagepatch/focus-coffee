@@ -3,7 +3,7 @@
 A simple web/desktop Coffee Pomo timer made using Tauri, with different themes and session options, and an optional task list.
 
 ## Refilling Pomo Timer
-<img height="500" src="https://github.com/user-attachments/assets/8833dc32-ef57-4d54-9993-4672a1349d0b" />
+<img height="500" src="https://github.com/user-attachments/assets/7242fa38-5c08-44ae-a4d1-eea9a25337f2" />
 <img height="500" src="https://github.com/user-attachments/assets/4ec4b62c-e3cd-46df-9602-d015f6de278e" />
 
 
