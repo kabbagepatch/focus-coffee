@@ -9,6 +9,16 @@ if (window.__TAURI__) {
 
 let curTheme = localStorage.getItem('theme') || 'Coffee';
 const themes = {
+  'Coffee': {
+    'color-header': 'hsl(25, 29%, 18%)',
+    'color-shadow': 'hsl(25, 29%, 25%)',
+    'color-subheader': 'hsl(345, 7%, 89%)',
+    'color-drink': 'hsl(6, 27%, 15%)',
+    'color-background': 'hsla(32, 50%, 77%, 1.00)',
+    'color-cup': 'hsl(23, 40%, 39%)',
+    'color-text': 'hsl(345, 7%, 89%)',
+    'color-text-shadow': 'hsl(26, 42%, 19%)',
+  },
   'Latte': {
     'color-header': 'hsl(39, 59%, 78%)',
     'color-shadow': 'hsl(39, 59%, 58%)',
@@ -28,16 +38,6 @@ const themes = {
     'color-cup': 'hsl(336, 100%, 70%)',
     'color-text': 'white',
     'color-text-shadow': 'hsl(276, 100%, 25%)'
-  },
-  'Coffee': {
-    'color-header': 'hsl(25, 29%, 18%)',
-    'color-shadow': 'hsl(25, 29%, 25%)',
-    'color-subheader': 'hsl(345, 7%, 89%)',
-    'color-drink': 'hsl(6, 27%, 15%)',
-    'color-background': 'hsl(22, 30%, 77%, 1.00)',
-    'color-cup': 'hsl(23, 40%, 39%)',
-    'color-text': 'hsl(345, 7%, 89%)',
-    'color-text-shadow': 'hsl(26, 42%, 19%)',
   },
   'Matcha': {
     'color-header': 'hsl(60, 63%, 89%)',

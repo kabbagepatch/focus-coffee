@@ -120,12 +120,14 @@ const setTheme = (theme) => {
     document.getElementById('cup').style.borderRadius = '30%';
     document.getElementById('cup').style.borderTopLeftRadius = '3%';
     document.getElementById('cup').style.borderTopRightRadius = '3%';
+    document.getElementById('container').style.paddingRight = 0;
   } else {
     animationType = 'steam';
     document.querySelector('#coffee-container').classList.remove('no-after');
     document.getElementById('cup').style.borderRadius = '50%';
     document.getElementById('cup').style.borderTopLeftRadius = '3%';
     document.getElementById('cup').style.borderTopRightRadius = '3%';
+    document.getElementById('container').style.paddingRight = '15px';
   }
 }
 
@@ -235,7 +237,7 @@ const showIce = () => {
     cube.style.opacity = '1';
     cube.offsetHeight;
 
-    cube.style.left = `${cube.clientWidth / 3 + index * cube.clientWidth * 1.3}px`;
+    cube.style.left = `${cube.clientWidth / 3 + index * cube.clientWidth * 1.45}px`;
     setTimeout(() => {
       cube.style.transition = `top 2s ease ${index * 0.25}s, transform 2s ease ${index * 0.25}s`;
       const randomNumber = getRandomNumber(80, 100);
